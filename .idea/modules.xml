@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/simulator-source/simulator-source.iml" filepath="$PROJECT_DIR$/simulator-source/simulator-source.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spark-core/spark-core.iml" filepath="$PROJECT_DIR$/spark-core/spark-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spark-learning.iml" filepath="$PROJECT_DIR$/spark-learning.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spark-sql/spark-sql.iml" filepath="$PROJECT_DIR$/spark-sql/spark-sql.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spark-streaming/spark-streaming.iml" filepath="$PROJECT_DIR$/spark-streaming/spark-streaming.iml" />
+      <module fileurl="file://$PROJECT_DIR$/structured-streaming/structured-streaming.iml" filepath="$PROJECT_DIR$/structured-streaming/structured-streaming.iml" />
+    </modules>
+  </component>
+</project>
