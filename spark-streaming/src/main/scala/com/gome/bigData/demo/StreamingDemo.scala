@@ -12,7 +12,7 @@ object StreamingDemo {
     val conf = new SparkConf().setMaster("local[3]").setAppName("streamingDemo")
     val ssc = new StreamingContext(conf,Seconds(5))
     ssc.checkpoint("check")
-    val lines = ssc.socketTextStream("10.143.103.26", 9999)
+    val lines = ssc.socketTextStream("localhost", 9999)
 
     /**
       * 按空格分隔
