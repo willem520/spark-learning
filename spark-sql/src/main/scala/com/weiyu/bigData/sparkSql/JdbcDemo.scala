@@ -1,4 +1,4 @@
-package com.weiyu.bigData.simulator
+package com.weiyu.bigData.sparkSql
 
 import java.util.Properties
 

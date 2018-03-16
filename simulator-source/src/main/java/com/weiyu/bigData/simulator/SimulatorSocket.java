@@ -1,4 +1,4 @@
-package com.weiyu.bigData.demo;
+package com.weiyu.bigData.simulator;
 
 import java.io.*;
 import java.net.ServerSocket;

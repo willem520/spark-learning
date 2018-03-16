@@ -1,4 +1,4 @@
-package com.weiyu.bigData.simulator
+package com.weiyu.bigData.sparkStreaming
 
 import kafka.serializer.StringDecoder
 import org.apache.spark.SparkConf

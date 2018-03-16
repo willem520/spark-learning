@@ -1,4 +1,4 @@
-package com.weiyu.bigData.simulator
+package com.weiyu.bigData.structuredStreaming
 
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.expr

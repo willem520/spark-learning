@@ -1,4 +1,4 @@
-package com.weiyu.bigData.simulator
+package com.weiyu.bigData.structuredStreaming
 
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.SparkSession

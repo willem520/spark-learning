@@ -1,4 +1,4 @@
-package com.weiyu.bigData.simulator
+package com.weiyu.bigData.sparkCore
 
 import org.apache.spark.{SparkConf, SparkContext}
 
