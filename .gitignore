@@ -21,3 +21,11 @@
 hs_err_pid*
 
 /.idea/
+/spark-learning.iml
+/simulator-source/simulator-source.iml
+/spark-core/spark-core.iml
+/spark-sql/spark-sql.iml
+/spark-streaming/spark-streaming.iml
+/structured-streaming/structured-streaming.iml
+/spark-warehouse/
+*/target/
