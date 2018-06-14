@@ -27,7 +27,7 @@
     </modules>
 
     <dependencies>
-        <!--<dependency>
+        <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
             <version>${scala.version}</version>
@@ -43,7 +43,7 @@
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-reflect</artifactId>
             <version>${scala.version}</version>
-        </dependency>-->
+        </dependency>
 
         <!--<dependency>
             <groupId>org.apache.hadoop</groupId>
