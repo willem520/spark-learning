@@ -3,7 +3,7 @@ package willem.weiyu.bigData.core
 import org.apache.spark.{SparkConf, SparkContext}
 
 /**
-  * @author weiyu@gomeholdings.com
+  * @author weiyu
   */
 object MapPartitionWithIndexTest {
 

@@ -6,7 +6,7 @@ import org.apache.spark.streaming.kafka.KafkaUtils
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 
 /**
-  * @author weiyu@gomeholdings.com
+  * @author weiyu
   */
 object StreamingKafkaDemo {
 
