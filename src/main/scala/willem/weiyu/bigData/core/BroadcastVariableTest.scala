@@ -13,7 +13,7 @@ import org.apache.spark.{SparkConf, SparkContext}
 object BroadcastVariableTest {
 
   def main(args: Array[String]): Unit = {
-    val sparkConf = new SparkConf().setMaster("local").setAppName("broadcastVariableTest")
+    val sparkConf = new SparkConf().setMaster("local[4]").setAppName("broadcastVariableTest")
     val sc = new SparkContext(sparkConf)
 
     val factor = 3
