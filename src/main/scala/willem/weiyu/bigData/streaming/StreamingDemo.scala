@@ -9,9 +9,10 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
 object StreamingDemo {
 
   def main(args: Array[String]): Unit = {
-    val conf = new SparkConf().setMaster("local[3]").setAppName("streamingDemo")
+    System.setProperty("hadoop.home.dir", "D:\\hadoop-2.8.5")
+    val conf = new SparkConf().setMaster("local[4]").setAppName("streamingDemo")
     val ssc = new StreamingContext(conf,Seconds(5))
-    ssc.checkpoint("check")
+    ssc.checkpoint("/spark/checkpoint")
     val lines = ssc.socketTextStream("localhost", 9999)
 
     /**
