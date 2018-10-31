@@ -18,7 +18,7 @@ object StreamingDemo {
     /**
       * 按空格分隔
       */
-    val words = lines.flatMap(_.split("\\s"))
+    val words = lines.flatMap(_.split(",|，|\\s+"))
 
     /**
       * 单个word变成tuple,并累加

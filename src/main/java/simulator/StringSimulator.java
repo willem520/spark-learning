@@ -11,7 +11,10 @@ import java.util.Random;
  * @Date 2018/10/30 16:22
  */
 public class StringSimulator implements Runnable {
-    private static final String[] LINES = new String[]{"hello Spark", "hello Storm", "hello Flink"};
+    private static final String[] LINES = new String[]{"Apache Storm is a free and open source distributed realtime computation system",
+            "Spark Streaming is an extension of the core Spark API that enables scalable, high-throughput, fault-tolerant stream processing of live data streams",
+            "Apache Flink is a framework and distributed processing engine for stateful computations over unbounded and bounded data streams",
+            "Apache Beam is an advanced unified programming model"};
 
     public void run() {
         Random r = new Random();
