@@ -2,11 +2,10 @@ package simulator;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.clients.producer.RecordMetadata;
 
 import java.util.Properties;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 /**
  * @Author weiyu005@ke.com
@@ -40,18 +39,20 @@ public class KafkaProducerSimulator {
         props.put("buffer.memory", 33554432);
 
         props.put("key.serializer",
-                "org.apache.kafka.common.serializa-tion.StringSerializer");
+                "org.apache.kafka.common.serialization.StringSerializer");
 
         props.put("value.serializer",
-                "org.apache.kafka.common.serializa-tion.StringSerializer");
+                "org.apache.kafka.common.serialization.StringSerializer");
 
         KafkaProducer kafkaProducer = new KafkaProducer<String, String>(props);
 
         Runtime.getRuntime().addShutdownHook(new Thread(()-> kafkaProducer.close()));
 
         while (true){
-            ProducerRecord record = new ProducerRecord<String,String>(TOPIC,"123");
+            Random rand = new Random();
+            ProducerRecord record = new ProducerRecord<String,String>(TOPIC,"message_"+rand.nextInt(100));
             kafkaProducer.send(record);
+            Thread.sleep(1500);
         }
     }
 }
