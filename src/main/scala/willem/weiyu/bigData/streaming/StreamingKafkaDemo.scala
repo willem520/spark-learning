@@ -13,14 +13,15 @@ import org.apache.spark.{SparkConf, TaskContext}
   */
 object StreamingKafkaDemo {
   val TOPIC = "test"
+  val GROUP_ID = "weiyu"
+  val CHECKPOINT_PATH = "/spark/checkpoint"
 
   def main(args: Array[String]): Unit = {
     System.setProperty("hadoop.home.dir", "D:\\hadoop-2.8.5")
     val conf = new SparkConf().setMaster("local[4]").setAppName("kafkaDemo")
     val ssc = new StreamingContext(conf,Seconds(5))
-    ssc.checkpoint("/spark/checkpoint")
-    val kafkaParams = Map("group.id"->"weiyu",
-      "zookeeper.connect" -> "10.26.27.81:2181",
+    ssc.checkpoint(CHECKPOINT_PATH)
+    val kafkaParams = Map("group.id"->GROUP_ID,
       "bootstrap.servers"->"10.26.27.81:9092",
       "key.deserializer" -> classOf[StringDeserializer],
       "value.deserializer" -> classOf[StringDeserializer],

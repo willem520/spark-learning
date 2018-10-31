@@ -23,7 +23,6 @@ object StreamingKafkaExactlyOnce {
     val ssc = new StreamingContext(conf,Seconds(5))
     ssc.checkpoint(CHECKPOINT_PATH)
     val kafkaParams = Map("group.id"->GROUP_ID,
-      "zookeeper.connect" -> "10.26.27.81:2181",
       "bootstrap.servers"->"10.26.27.81:9092",
       "key.deserializer" -> classOf[StringDeserializer],
       "value.deserializer" -> classOf[StringDeserializer],

@@ -16,7 +16,6 @@
         <spark.version>2.3.0</spark.version>
         <json.version>1.2.46</json.version>
         <mysql.version>6.0.6</mysql.version>
-        <kafka.version>0.10.2.1</kafka.version>
     </properties>
 
     <dependencies>
@@ -86,12 +85,6 @@
             <artifactId>spark-sql-kafka-0-10_2.11</artifactId>
             <version>${spark.version}</version>
         </dependency>
-
-        <!--<dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka-clients</artifactId>
-            <version>${kafka.version}</version>
-        </dependency>-->
     </dependencies>
 
     <build>
