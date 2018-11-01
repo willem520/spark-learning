@@ -16,9 +16,7 @@ object StreamingCheckpointDemo {
   def start(): Unit ={
     System.setProperty("hadoop.home.dir", "D:\\hadoop-2.8.5")
     val conf = new SparkConf().setMaster("local[4]").setAppName("streamingDemo")
-    val ssc = StreamingContext.getOrCreate(CHECKPOINT_PATH,() => {
-      streamCreatFun(conf,DURATION,CHECKPOINT_PATH)
-    })
+    val ssc = StreamingContext.getOrCreate(CHECKPOINT_PATH,() => getStreamContext(conf,DURATION,CHECKPOINT_PATH))
     ssc.start()
     /**
       * 等待程序结束
@@ -27,7 +25,7 @@ object StreamingCheckpointDemo {
   }
 
   //从checkpoint恢复job上下文或者新建job上下文
-  def streamCreatFun(conf: SparkConf, duration : Int, checkpointDir : String) = {
+  def getStreamContext(conf: SparkConf, duration : Int, checkpointDir : String) = {
     val ssc =  new StreamingContext(conf, Seconds(duration))
     ssc.checkpoint(checkpointDir)
     val lines = ssc.socketTextStream("localhost", 9999)
