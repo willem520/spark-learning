@@ -35,7 +35,7 @@ public class StringSimulator implements Runnable {
                 System.out.println("******发送的消息为"+LINES[msgNum]+"******");
                 writer.write(LINES[msgNum] + "\n");
                 writer.flush();
-                Thread.sleep(2000);
+                Thread.sleep(500);
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();

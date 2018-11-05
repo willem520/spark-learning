@@ -5,6 +5,8 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
 
 /**
   * @author weiyu
+  * @description 有状态单词统计，可实现累加
+  * @Date 2018/11/05 18:20
   */
 object StreamingCheckpointDemo {
   val CHECKPOINT_PATH = "/spark/checkpoint"
@@ -38,8 +40,6 @@ object StreamingCheckpointDemo {
     /**
       * 单个word变成tuple,并累加
       */
-    /*val wordCount = words.map(word =>(word, 1)).reduceByKey(_+_)*/
-
     val func = (oldVal:Seq[Int],newVal:Option[Int])=>{
       Some(oldVal.sum + newVal.getOrElse(0))
     }

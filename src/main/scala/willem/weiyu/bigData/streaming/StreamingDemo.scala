@@ -5,6 +5,8 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
 
 /**
   * @author weiyu
+  * @description 无状态单词统计
+  * @Date 2018/11/05 18:20
   */
 object StreamingDemo {
 
@@ -12,7 +14,6 @@ object StreamingDemo {
     System.setProperty("hadoop.home.dir", "D:\\hadoop-2.8.5")
     val conf = new SparkConf().setMaster("local[4]").setAppName("streamingDemo")
     val ssc = new StreamingContext(conf,Seconds(5))
-    ssc.checkpoint("/spark/checkpoint")
     val lines = ssc.socketTextStream("localhost", 9999)
 
     /**
@@ -23,13 +24,7 @@ object StreamingDemo {
     /**
       * 单个word变成tuple,并累加
       */
-    /*val wordCount = words.map(word =>(word, 1)).reduceByKey(_+_)*/
-
-    val func = (oldVal:Seq[Int],newVal:Option[Int])=>{
-      Some(oldVal.sum + newVal.getOrElse(0))
-    }
-
-    val wordCount = words.map(word =>(word, 1)).updateStateByKey[Int](func)
+    val wordCount = words.map((_, 1)).reduceByKey(_+_)
 
     wordCount.print()
     ssc.start()
