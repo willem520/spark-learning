@@ -5,20 +5,22 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
 
 /**
   * @author weiyu
-  * @description 获取窗口中的元素
+  * @description 窗口统计
   * @Date 2018/11/05 18:20
   */
-object StreamingWindow {
+object StreamingReduceByKeyAndWindow {
 
   def main(args: Array[String]): Unit = {
     System.setProperty("hadoop.home.dir", "D:\\hadoop-2.8.5")
     val conf = new SparkConf().setMaster("local[4]").setAppName("streamingDemo")
-    val ssc = new StreamingContext(conf,Seconds(1))
+    val ssc = new StreamingContext(conf,Seconds(5))
     val lines = ssc.socketTextStream("localhost", 9999)
 
-    val lineWindow = lines.window(Seconds(3),Seconds(1))
+    val words = lines.flatMap(_.split(",|，|\\s+"))
 
-    lineWindow.print()
+    val wordCountWindow = words.map((_, 1)).reduceByKeyAndWindow((v1: Int, v2: Int) => v1 + v2, Seconds(60), Seconds(10))
+
+    wordCountWindow.print()
     ssc.start()
 
     /**
