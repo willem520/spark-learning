@@ -1,4 +1,4 @@
-package willem.weiyu.bigData.core
+package willem.weiyu.bigData.spark.core
 
 import org.apache.spark.{SparkConf, SparkContext}
 

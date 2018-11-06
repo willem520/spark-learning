@@ -1,14 +1,14 @@
-package willem.weiyu.bigData.streaming
+package willem.weiyu.bigData.spark.streaming
 
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 
 /**
   * @author weiyu
-  * @description 获取窗口中元素的个数
+  * @description 将窗口中元素进行reduce
   * @Date 2018/11/05 18:20
   */
-object StreamingCountByWindow {
+object StreamingReduceByWindow {
   val CHECKPOINT_PATH = "/spark/checkpoint"
 
   def main(args: Array[String]): Unit = {
@@ -18,9 +18,11 @@ object StreamingCountByWindow {
     ssc.checkpoint(CHECKPOINT_PATH)
     val lines = ssc.socketTextStream("localhost", 9999)
 
-    val lineCountWindow = lines.countByWindow(Seconds(3), Seconds(1))
+    val words = lines.flatMap(_.split(",|，|\\s+"))
 
-    lineCountWindow.print()
+    val wordReduceWindow = words.reduceByWindow(_ +"*"+_, Seconds(3), Seconds(1))
+
+    wordReduceWindow.print()
     ssc.start()
 
     /**

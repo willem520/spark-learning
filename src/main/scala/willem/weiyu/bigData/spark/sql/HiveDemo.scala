@@ -1,4 +1,4 @@
-package willem.weiyu.bigData.sql
+package willem.weiyu.bigData.spark.sql
 
 import org.apache.spark.sql.{SaveMode, SparkSession}
 

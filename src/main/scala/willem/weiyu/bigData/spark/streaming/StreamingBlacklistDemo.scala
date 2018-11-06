@@ -1,4 +1,4 @@
-package willem.weiyu.bigData.streaming
+package willem.weiyu.bigData.spark.streaming
 
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.{Seconds, StreamingContext}

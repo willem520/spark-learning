@@ -1,4 +1,4 @@
-package willem.weiyu.bigData.sql
+package willem.weiyu.bigData.spark.sql
 
 import java.text.SimpleDateFormat
 import java.util.{Date, Properties}

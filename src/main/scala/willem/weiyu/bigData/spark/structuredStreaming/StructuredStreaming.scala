@@ -1,4 +1,4 @@
-package willem.weiyu.bigData.structuredStreaming
+package willem.weiyu.bigData.spark.structuredStreaming
 
 import org.apache.spark.sql.SparkSession
 
