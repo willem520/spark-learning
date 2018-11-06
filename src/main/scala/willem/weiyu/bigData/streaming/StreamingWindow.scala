@@ -5,10 +5,10 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
 
 /**
   * @author weiyu
-  * @description 无状态单词统计
+  * @description 窗口统计
   * @Date 2018/11/05 18:20
   */
-object StreamingDemo {
+object StreamingWindow {
 
   def main(args: Array[String]): Unit = {
     System.setProperty("hadoop.home.dir", "D:\\hadoop-2.8.5")
@@ -21,10 +21,7 @@ object StreamingDemo {
       */
     val words = lines.flatMap(_.split(",|，|\\s+"))
 
-    /**
-      * 单个word变成tuple
-      */
-    val wordCount = words.map((_, 1)).reduceByKey(_+_)
+    val wordCount = words.map((_, 1)).reduceByKeyAndWindow((v1: Int, v2: Int) => v1 + v2, Seconds(60), Seconds(10))
 
     wordCount.print()
     ssc.start()

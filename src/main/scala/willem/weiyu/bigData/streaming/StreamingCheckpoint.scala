@@ -8,7 +8,7 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
   * @description 有状态单词统计，可实现累加
   * @Date 2018/11/05 18:20
   */
-object StreamingCheckpointDemo {
+object StreamingCheckpoint {
   val CHECKPOINT_PATH = "/spark/checkpoint"
   val DURATION = 5
   def main(args: Array[String]): Unit = {

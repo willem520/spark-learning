@@ -9,9 +9,9 @@ import org.apache.spark.{SparkConf, TaskContext}
 
 /**
   * @author weiyu
-  * @description spark streaming direct方式连接kafka，此方式
+  * @description spark streaming direct方式连接kafka
   */
-object StreamingKafkaDemo {
+object StreamingKafka {
   val TOPIC = "test"
   val GROUP_ID = "weiyu"
   val CHECKPOINT_PATH = "/spark/checkpoint"

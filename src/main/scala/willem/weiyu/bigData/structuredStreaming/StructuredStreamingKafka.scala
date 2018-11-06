@@ -3,7 +3,12 @@ package willem.weiyu.bigData.structuredStreaming
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.SparkSession
 
-object StructuredStreamingKafkaDemo {
+/**
+  * @author weiyu
+  * @description 单词统计
+  * @Date 2018/01/05 18:20
+  */
+object StructuredStreamingKafka {
 
   def main(args: Array[String]): Unit = {
     Logger.getLogger("org").setLevel(Level.INFO)

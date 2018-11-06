@@ -2,7 +2,12 @@ package willem.weiyu.bigData.structuredStreaming
 
 import org.apache.spark.sql.SparkSession
 
-object StructuredStreamingDemo {
+/**
+  * @author weiyu
+  * @description 单词统计
+  * @Date 2018/01/05 18:20
+  */
+object StructuredStreaming {
 
   def main(args: Array[String]): Unit = {
     System.setProperty("hadoop.home.dir", "D:\\hadoop-2.8.5")
