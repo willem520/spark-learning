@@ -11,8 +11,8 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
 object StreamingCheckpoint {
   val CHECKPOINT_PATH = "/spark/checkpoint"
   val DURATION = 5
-//  var HOST = "localhost"
-  var HOST = "10.26.27.81"
+//  val HOST = "localhost"
+  val HOST = "10.26.27.81"
 
   def main(args: Array[String]): Unit = {
     start();
