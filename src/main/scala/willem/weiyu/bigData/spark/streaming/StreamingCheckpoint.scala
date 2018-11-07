@@ -11,6 +11,9 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
 object StreamingCheckpoint {
   val CHECKPOINT_PATH = "/spark/checkpoint"
   val DURATION = 5
+//  var HOST = "localhost"
+  var HOST = "10.26.27.81"
+
   def main(args: Array[String]): Unit = {
     start();
   }
@@ -30,7 +33,7 @@ object StreamingCheckpoint {
   def getStreamContext(conf: SparkConf, duration : Int, checkpointDir : String) = {
     val ssc =  new StreamingContext(conf, Seconds(duration))
     ssc.checkpoint(checkpointDir)
-    val lines = ssc.socketTextStream("localhost", 9999)
+    val lines = ssc.socketTextStream(HOST, 9999)
 
     /**
       * 按空格分隔
