@@ -14,16 +14,19 @@ import org.apache.spark.{SparkConf, TaskContext}
   * @Date 2018/10/31 16:35
   */
 object StreamingKafkaExactlyOnce {
+  val MASTER = "local[4]"
+  val CHECKPOINT_PATH = "/spark/checkpoint"
   val TOPIC = "test"
   val GROUP_ID = "weiyu"
-  val CHECKPOINT_PATH = "/spark/checkpoint"
+  val BATCH_DURATION = 5
 
   def main(args: Array[String]): Unit = {
     System.setProperty("hadoop.home.dir", "D:\\hadoop-2.8.5")
-    val conf = new SparkConf().setMaster("local[4]").setAppName("kafkaDemo")
-    //开启背压
+
+    val conf = new SparkConf().setMaster(MASTER).setAppName(getClass.getSimpleName)
+    //开启背压,通过spark.streaming.kafka.maxRatePerPartition限制速率
     //conf.set("spark.streaming.backpressure.enabled","true")
-    val ssc = new StreamingContext(conf,Seconds(5))
+    val ssc = new StreamingContext(conf,Seconds(BATCH_DURATION))
     ssc.checkpoint(CHECKPOINT_PATH)
     val kafkaParams = Map("group.id"->GROUP_ID,//消费者组
       "bootstrap.servers"->"10.26.27.81:9092",//kafka集群地址

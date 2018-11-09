@@ -9,8 +9,9 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
   * @Date 2018/11/05 18:20
   */
 object StreamingCheckpoint {
+  val MASTER = "local[4]"
   val CHECKPOINT_PATH = "/spark/checkpoint"
-  val DURATION = 5
+  val BATCH_DURATION = 5
 //  val HOST = "localhost"
   val HOST = "10.26.27.81"
 
@@ -20,8 +21,10 @@ object StreamingCheckpoint {
 
   def start(): Unit ={
     System.setProperty("hadoop.home.dir", "D:\\hadoop-2.8.5")
-    val conf = new SparkConf().setMaster("local[4]").setAppName("streamingDemo")
-    val ssc = StreamingContext.getOrCreate(CHECKPOINT_PATH,() => getStreamContext(conf,DURATION,CHECKPOINT_PATH))
+
+    val conf = new SparkConf().setMaster(MASTER).setAppName(getClass.getSimpleName)
+    val ssc = StreamingContext.getOrCreate(CHECKPOINT_PATH,() => getStreamContext(conf,BATCH_DURATION,CHECKPOINT_PATH))
+
     ssc.start()
     /**
       * 等待程序结束

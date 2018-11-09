@@ -9,13 +9,22 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
   * @Date 2018/11/05 18:20
   */
 object StreamingReduceByKeyAndWindow {
+  val MASTER = "local[4]"
+  val CHECKPOINT_PATH = "/spark/checkpoint"
+  val BATCH_DURATION = 1
+  //  val HOST = "localhost"
+  val HOST = "10.26.27.81"
 
   def main(args: Array[String]): Unit = {
     System.setProperty("hadoop.home.dir", "D:\\hadoop-2.8.5")
-    val conf = new SparkConf().setMaster("local[4]").setAppName("streamingDemo")
-    val ssc = new StreamingContext(conf,Seconds(5))
-    val lines = ssc.socketTextStream("localhost", 9999)
 
+    val conf = new SparkConf().setMaster(MASTER).setAppName(getClass.getSimpleName)
+    val ssc = new StreamingContext(conf,Seconds(BATCH_DURATION))
+    val lines = ssc.socketTextStream(HOST, 9999)
+
+    /**
+      * 根据正则分隔
+      */
     val words = lines.flatMap(_.split(",|，|\\s+"))
 
     val wordCountWindow = words.map((_, 1)).reduceByKeyAndWindow((v1: Int, v2: Int) => v1 + v2, Seconds(60), Seconds(10))
