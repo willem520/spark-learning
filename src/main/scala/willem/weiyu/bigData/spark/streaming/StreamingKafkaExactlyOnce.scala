@@ -42,6 +42,7 @@ object StreamingKafkaExactlyOnce {
       val offsetRanges = rdd.asInstanceOf[HasOffsetRanges].offsetRanges
       rdd.foreachPartition{ item =>
         val offset = offsetRanges(TaskContext.get.partitionId)
+        //处理逻辑
         println(s"The record from topic [${offset.topic}] is in partition ${offset.partition} which offset from ${offset.fromOffset} to ${offset.untilOffset}")
         println(s"The record content is ${item.toList.mkString}")
       }
