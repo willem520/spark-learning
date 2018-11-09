@@ -40,11 +40,11 @@ object StreamingKafkaExactlyOnce {
 
     stream.foreachRDD { rdd =>
       val offsetRanges = rdd.asInstanceOf[HasOffsetRanges].offsetRanges
-      rdd.foreachPartition{ item =>
+      rdd.foreachPartition{ partitionOfRecords =>
         val offset = offsetRanges(TaskContext.get.partitionId)
         //处理逻辑
         println(s"The record from topic [${offset.topic}] is in partition ${offset.partition} which offset from ${offset.fromOffset} to ${offset.untilOffset}")
-        println(s"The record content is ${item.toList.mkString}")
+        println(s"The record content is ${partitionOfRecords.toList.mkString}")
       }
       //等操作完成后再提交offset
       stream.asInstanceOf[CanCommitOffsets].commitAsync(offsetRanges)
