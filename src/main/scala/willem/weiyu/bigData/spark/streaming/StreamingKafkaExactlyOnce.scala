@@ -21,6 +21,8 @@ object StreamingKafkaExactlyOnce {
   def main(args: Array[String]): Unit = {
     System.setProperty("hadoop.home.dir", "D:\\hadoop-2.8.5")
     val conf = new SparkConf().setMaster("local[4]").setAppName("kafkaDemo")
+    //开启背压
+    //conf.set("spark.streaming.backpressure.enabled","true")
     val ssc = new StreamingContext(conf,Seconds(5))
     ssc.checkpoint(CHECKPOINT_PATH)
     val kafkaParams = Map("group.id"->GROUP_ID,//消费者组
