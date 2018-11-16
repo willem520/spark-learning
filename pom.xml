@@ -16,6 +16,7 @@
         <spark.version>2.3.0</spark.version>
         <json.version>1.2.46</json.version>
         <mysql.version>6.0.6</mysql.version>
+        <hbase.version>2.1.0</hbase.version>
     </properties>
 
     <dependencies>
@@ -84,6 +85,12 @@
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-sql-kafka-0-10_2.11</artifactId>
             <version>${spark.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-client</artifactId>
+            <version>${hbase.version}</version>
         </dependency>
     </dependencies>
 
