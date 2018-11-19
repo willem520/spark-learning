@@ -9,13 +9,17 @@ import org.apache.spark.sql.SparkSession
   * @Date 2018/01/05 18:20
   */
 object StructuredStreamingKafka {
+  val MASTER = "local[4]"
+  val BOOTSTRAP_SERVER = "10.26.27.81:9092"
 
   def main(args: Array[String]): Unit = {
     Logger.getLogger("org").setLevel(Level.INFO)
-    val spark = SparkSession.builder().master("local").appName("StructuredStreamingKafkaDmeo").getOrCreate()
+    val spark = SparkSession.builder()
+      .master(MASTER).appName(getClass.getSimpleName)
+      .getOrCreate()
     val inputStream = spark.readStream.format("kafka")
-      .option("kafka.bootstrap.servers", "10.143.90.38:19092,10.143.90.39:19092,10.143.90.49:19092")
-      .option("subscribe", "realtime_meijie_test")
+      .option("kafka.bootstrap.servers", BOOTSTRAP_SERVER)
+      .option("subscribe", "test")
       .option("startingOffsets", "earliest")
       .option("minPartitions", "10")
       .option("failOnDataLoss", "true")
