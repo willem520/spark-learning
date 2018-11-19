@@ -4,6 +4,9 @@ import java.util.Properties
 
 import org.apache.spark.sql.SparkSession
 
+/**
+  * @Author weiyu
+  */
 object SparkJdbc {
   val MASTER = "local[4]"
   val MYSQL_URL = "jdbc:mysql://10.33.108.22:3307/rent_plat?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull"

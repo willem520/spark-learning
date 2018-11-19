@@ -2,6 +2,9 @@ package willem.weiyu.bigData.spark.sql
 
 import org.apache.spark.sql.{SaveMode, SparkSession}
 
+/**
+  * @Author weiyu
+  */
 object HiveDemo {
 
   def main(args: Array[String]): Unit = {

@@ -2,6 +2,9 @@ package willem.weiyu.bigData.spark.core
 
 import org.apache.spark.{SparkConf, SparkContext}
 
+/**
+  * @Author weiyu
+  */
 object FlatMapTest {
 
   def main(args: Array[String]): Unit = {
