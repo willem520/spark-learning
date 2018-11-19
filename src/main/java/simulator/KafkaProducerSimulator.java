@@ -10,7 +10,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 /**
- * @Author weiyu005@ke.com
+ * @Author weiyu
  * @Description
  * @Date 2018/10/31 11:44
  */
@@ -19,7 +19,7 @@ public class KafkaProducerSimulator {
     public static final String BOOTSTRAP_SERVER = "10.26.27.81:9092";
     public static final String[] OS_TYPE = new String[]{"Android", "IOS", "Other", "None"};
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         // create instance for properties to access producer configs
         Properties props = new Properties();
 
