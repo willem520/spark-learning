@@ -23,8 +23,14 @@ object StreamingKafkaExactlyOnce2 {
     System.setProperty("hadoop.home.dir", "D:\\hadoop-2.8.5")
 
     val conf = new SparkConf().setMaster(MASTER).setAppName(getClass.getSimpleName)
-    //开启背压,通过spark.streaming.kafka.maxRatePerPartition限制速率
+    //开启背压,通过spark.streaming.kafka.maxRatePerPartition限制速率（默认为false）
     //conf.set("spark.streaming.backpressure.enabled","true")
+    //确保在kill任务时，能够处理完最后一批数据再关闭程序（默认为false）
+    //conf.set("spark.streaming.stopGracefullyOnShutdown","true")
+    //限制第一次批处理应消费的数据，防止造成系统阻塞（默认读取所有）
+    //conf.set("spark.streaming.backpressure.initialRate","1000")
+    //限制每秒每个消费线程读取每个kafka分区最大的数据量
+    //conf.set("spark.streaming.kafka.maxRatePerPartition","1000")
     val ssc = new StreamingContext(conf,Seconds(BATCH_DURATION))
     //ssc.checkpoint(CHECKPOINT_PATH)
     val kafkaParams = Map("group.id"->GROUP_ID,//消费者组
