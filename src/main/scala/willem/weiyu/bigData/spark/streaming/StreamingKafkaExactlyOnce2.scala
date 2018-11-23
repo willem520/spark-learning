@@ -22,7 +22,7 @@ object StreamingKafkaExactlyOnce2 {
   def main(args: Array[String]): Unit = {
     System.setProperty("hadoop.home.dir", "D:\\hadoop-2.8.5")
 
-    val conf = new SparkConf().setMaster(MASTER).setAppName(getClass.getSimpleName)
+    val sparkConf = new SparkConf().setMaster(MASTER).setAppName(getClass.getSimpleName)
     //开启背压,通过spark.streaming.kafka.maxRatePerPartition限制速率（默认为false）
     //conf.set("spark.streaming.backpressure.enabled","true")
     //确保在kill任务时，能够处理完最后一批数据再关闭程序（默认为false）
@@ -31,7 +31,15 @@ object StreamingKafkaExactlyOnce2 {
     //conf.set("spark.streaming.backpressure.initialRate","1000")
     //限制每秒每个消费线程读取每个kafka分区最大的数据量
     //conf.set("spark.streaming.kafka.maxRatePerPartition","1000")
-    val ssc = new StreamingContext(conf,Seconds(BATCH_DURATION))
+
+    val ssc = StreamingContext.getOrCreate(CHECKPOINT_PATH,()=> getStreamingContext(sparkConf, BATCH_DURATION, CHECKPOINT_PATH))
+
+    ssc.start()
+    ssc.awaitTermination()
+  }
+
+  def getStreamingContext(sparkConf: SparkConf, duration: Int, checkPointDir: String): StreamingContext = {
+    val ssc = new StreamingContext(sparkConf,Seconds(BATCH_DURATION))
     //ssc.checkpoint(CHECKPOINT_PATH)
     val kafkaParams = Map("group.id"->GROUP_ID,//消费者组
       "bootstrap.servers"->"10.26.27.81:9092",//kafka集群地址
@@ -56,7 +64,6 @@ object StreamingKafkaExactlyOnce2 {
 
     zookeeperOffsetManager.persistOffset(stream, true)
 
-    ssc.start()
-    ssc.awaitTermination()
+    ssc
   }
 }
