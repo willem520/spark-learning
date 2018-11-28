@@ -8,7 +8,8 @@ import org.apache.spark.streaming.{Seconds, State, StateSpec, StreamingContext}
   * @description 有状态单词统计，通过mapWithState实现累加
   * @Date 2018/11/05 18:20
   */
-object StreamingStateful2 {
+
+object StreamingMapWithState {
   val MASTER = "local[*]"
   val CHECKPOINT_PATH = "/spark/checkpoint"
   val BATCH_DURATION = 5
