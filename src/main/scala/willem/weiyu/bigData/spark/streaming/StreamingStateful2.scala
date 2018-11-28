@@ -1,15 +1,15 @@
 package willem.weiyu.bigData.spark.streaming
 
 import org.apache.spark.SparkConf
-import org.apache.spark.streaming.{Seconds, StreamingContext}
+import org.apache.spark.streaming.{Seconds, State, StateSpec, StreamingContext}
 
 /**
   * @author weiyu
-  * @description 有状态单词统计，可实现累加
+  * @description 有状态单词统计，通过mapWithState实现累加
   * @Date 2018/11/05 18:20
   */
-object StreamingCheckpoint {
-  val MASTER = "local[4]"
+object StreamingStateful2 {
+  val MASTER = "local[*]"
   val CHECKPOINT_PATH = "/spark/checkpoint"
   val BATCH_DURATION = 5
 //  val HOST = "localhost"
@@ -23,7 +23,7 @@ object StreamingCheckpoint {
     System.setProperty("hadoop.home.dir", "D:\\hadoop-2.8.5")
 
     val conf = new SparkConf().setMaster(MASTER).setAppName(getClass.getSimpleName)
-    val ssc = StreamingContext.getOrCreate(CHECKPOINT_PATH,() => getStreamContext(conf,BATCH_DURATION,CHECKPOINT_PATH))
+    val ssc = StreamingContext.getOrCreate(CHECKPOINT_PATH,() => getStreamingContext(conf,BATCH_DURATION,CHECKPOINT_PATH))
 
     ssc.start()
     /**
@@ -33,7 +33,7 @@ object StreamingCheckpoint {
   }
 
   //从checkpoint恢复job上下文或者新建job上下文
-  def getStreamContext(conf: SparkConf, duration : Int, checkpointDir : String) = {
+  def getStreamingContext(conf: SparkConf, duration : Int, checkpointDir : String) = {
     val ssc =  new StreamingContext(conf, Seconds(duration))
     ssc.checkpoint(checkpointDir)
     val lines = ssc.socketTextStream(HOST, 9999)
@@ -46,11 +46,13 @@ object StreamingCheckpoint {
     /**
       * 单个word变成tuple,并累加
       */
-    val func = (oldVal:Seq[Int],newVal:Option[Int])=>{
-      Some(oldVal.sum + newVal.getOrElse(0))
+    val func = (word : String, one : Option[Int], state:State[Int])=>{
+      val sum = one.getOrElse(0) + state.getOption.getOrElse(0)
+      state.update(sum)
+      (word, sum)
     }
 
-    val wordCount = words.map(word =>(word, 1)).updateStateByKey[Int](func)
+    val wordCount = words.map(word =>(word, 1)).mapWithState(StateSpec.function(func))
 
     wordCount.print()
 
