@@ -45,7 +45,7 @@ object StreamingMapWithState {
     val words = lines.flatMap(_.split("\\s"))
 
     /**
-      * 单个word变成tuple,并累加
+      * 状态累加
       */
     val func = (word : String, one : Option[Int], state:State[Int])=>{
       val sum = one.getOrElse(0) + state.getOption.getOrElse(0)
