@@ -1,23 +1,22 @@
 package willem.weiyu.bigData.spark.streaming
 
 import com.alibaba.fastjson.JSON
-import org.apache.hadoop.hbase.client.{ConnectionFactory, Put}
-import org.apache.hadoop.hbase.util.Bytes
-import org.apache.hadoop.hbase.{HBaseConfiguration, TableName}
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe
 import org.apache.spark.streaming.kafka010.LocationStrategies.PreferConsistent
 import org.apache.spark.streaming.kafka010.{HasOffsetRanges, KafkaUtils}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.{SparkConf, TaskContext}
+import org.bson.Document
+import willem.weiyu.bigData.spark.common.MongoPool
 
 /**
   * @Author weiyu005
   * @Description
-  * @Date 2018/11/15 11:45
+  * @Date 2018/12/03 18:16
   */
-object Streaming2HBase {
-  val MASTER = "local[4]"
+object Streaming2Mongo {
+  val MASTER = "local[*]"
   val CHECKPOINT_PATH = "/spark/checkpoint"
   val TOPIC = "test"
   val GROUP_ID = "weiyu"
@@ -48,21 +47,12 @@ object Streaming2HBase {
     val userClicks = event.map(x => (x.getString("uid"), x.getIntValue("click_count"))).reduceByKey(_+_)
     userClicks.foreachRDD(rdd => {
       rdd.foreachPartition(records=>{
-        val tableName = "pageViewStream"
-        val hbaseConf = HBaseConfiguration.create()
-        /*hbaseConf.set("hbase.zookeeper.quorum", "10.26.27.81")
-        hbaseConf.set("hbase.zookeeper.property.clientPort", "2181")
-        hbaseConf.set("hbase.defaults.for.version.skip", "true")*/
-        val conn = ConnectionFactory.createConnection(hbaseConf)
-        val table = conn.getTable(TableName.valueOf(tableName))
-        records.foreach(pair =>{
-          val uid = pair._1
-          val click = pair._2
-          val put = new Put(Bytes.toBytes(uid))
-          put.addColumn(Bytes.toBytes("stat"), Bytes.toBytes("clickStat"), Bytes.toBytes(click))
-          table.put(put)
+        val nodes = "10.26.15.199:27017"
+        lazy val  client = MongoPool(nodes)
+        lazy val  coll = client.getDatabase("streaming").getCollection("page_view")
+        records.foreach(r =>{
+          coll.insertOne(new Document().append("uid",r._1).append("clicks",r._2))
         })
-        table.close
       })
     })
 
