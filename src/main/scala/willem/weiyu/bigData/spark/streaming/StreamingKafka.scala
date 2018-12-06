@@ -29,6 +29,7 @@ object StreamingKafka {
       "bootstrap.servers"->"10.26.27.81:9092",
       "key.deserializer" -> classOf[StringDeserializer],
       "value.deserializer" -> classOf[StringDeserializer],
+      "enable.auto.commit" -> (false: java.lang.Boolean),
       "auto.offset.reset"->"earliest")
     val topics = Set(TOPIC)
 
