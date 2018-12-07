@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.{Seconds, StreamingContext}
-import willem.weiyu.bigData.spark.common.ZookeeperOffsetManager
+import willem.weiyu.bigData.spark.common.KafkaOffsetManager
 
 /**
   * @author weiyu
@@ -49,7 +49,7 @@ object StreamingKafkaExactlyOnce2 {
       "auto.offset.reset"->"earliest")//当各分区下有已提交的offset时，从提交的offset开始消费，无提交的从指定位置（earliest,latest）开始消费
     val topics = Seq(TOPIC)
 
-    val zookeeperOffsetManager = new ZookeeperOffsetManager(ZK_HOSTS, kafkaParams)
+    val zookeeperOffsetManager = new KafkaOffsetManager(ZK_HOSTS, kafkaParams)
 
     val stream = zookeeperOffsetManager.createDirectStream[String, String](ssc, topics, kafkaParams)
 

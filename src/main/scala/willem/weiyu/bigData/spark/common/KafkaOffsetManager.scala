@@ -19,7 +19,7 @@ import scala.util.Try
   * @Description 管理存储在zookeeper上的kafka offset
   * @Date 2018/11/19 12:26
   */
-class ZookeeperOffsetManager(zkHosts: String, kafkaParams: Map[String, Object]) extends Serializable {
+class KafkaOffsetManager(zkHosts: String, kafkaParams: Map[String, Object]) extends Serializable {
   @transient private lazy val log = LoggerFactory.getLogger(getClass)
   val ZK_SESSION_TIMEOUT = 3000
   val ZK_CONNECTION_TIMEOUT = 3000
