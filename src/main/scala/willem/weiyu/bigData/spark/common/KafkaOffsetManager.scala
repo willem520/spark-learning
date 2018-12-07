@@ -11,6 +11,7 @@ import org.apache.spark.streaming.kafka010.{HasOffsetRanges, KafkaUtils}
 import org.slf4j.LoggerFactory
 
 import scala.collection.JavaConversions._
+import scala.collection.mutable
 import scala.reflect.ClassTag
 import scala.util.Try
 
@@ -51,29 +52,32 @@ class KafkaOffsetManager(zkHosts: String, kafkaParams: Map[String, Object]) exte
     * @return
     */
   def readOffsets(topics: Seq[String], groupId: String): Map[TopicPartition, Long] = {
-    val topicPartOffsetMap = collection.mutable.HashMap.empty[TopicPartition, Long]
+    val topicPartOffsetMap = mutable.Map.empty[TopicPartition, Long]
     val partitionMap = zookeeperUtils.getPartitionsForTopics(topics)
 
     partitionMap.foreach(topicPartitions => {
-      val zkGroupTopicDirs = new ZKGroupTopicDirs(groupId, topicPartitions._1)
-      topicPartitions._2.foreach(partition =>{
-        val offsetPath = zkGroupTopicDirs.consumerOffsetDir + "/" + partition
+      val topic = topicPartitions._1
+      val partitions = topicPartitions._2
+      val zkGroupTopicDirs = new ZKGroupTopicDirs(groupId, topic)
+
+      partitions.foreach(partition =>{
+        val offsetPath = s"${zkGroupTopicDirs.consumerOffsetDir}/${partition}"
         val tryGetKafkaOffset = Try {
           val offsetStatTuple = zookeeperUtils.readData(offsetPath)
           if (offsetStatTuple != null){
-            log.info("查询Kafka消息偏移量详情: 话题:{}, 分区:{}, 偏移量:{}, ZK节点路径:{}", Seq[AnyRef](topicPartitions._1, partition.toString, offsetStatTuple._1, offsetPath): _*)
-            topicPartOffsetMap.put(new TopicPartition(topicPartitions._1, Integer.valueOf(partition)), offsetStatTuple._1.toLong)
+            log.info("查询Kafka消息偏移量详情: 话题:{}, 分区:{}, 偏移量:{}, ZK节点路径:{}", Seq[AnyRef](topic, partition.toString, offsetStatTuple._1, offsetPath): _*)
+            topicPartOffsetMap.put(new TopicPartition(topic, Integer.valueOf(partition)), offsetStatTuple._1.toLong)
           }
         }
         if (tryGetKafkaOffset.isFailure){
           val consumer = new KafkaConsumer[String, Object](kafkaParams)
-          val partitionList = List(new TopicPartition(topicPartitions._1, partition))
+          val partitionList = List(new TopicPartition(topic, partition))
           consumer.assign(partitionList)
           val minAvailableOffset = consumer.beginningOffsets(partitionList).values.head
           consumer.close
           log.warn("查询Kafka消息偏移量详情: 没有上一次的ZK节点:{}, 话题:{}, 分区:{}, ZK节点路径:{}, 使用最小可用偏移量:{}",
-            Seq[AnyRef](tryGetKafkaOffset.failed.get.getMessage, topicPartitions._1, partition.toString, offsetPath, minAvailableOffset): _*)
-          topicPartOffsetMap.put(new TopicPartition(topicPartitions._1, Integer.valueOf(partition)), minAvailableOffset)
+            Seq[AnyRef](tryGetKafkaOffset.failed.get.getMessage, topic, partition.toString, offsetPath, minAvailableOffset): _*)
+          topicPartOffsetMap.put(new TopicPartition(topic, Integer.valueOf(partition)), minAvailableOffset)
         }
       })
     })
@@ -93,7 +97,7 @@ class KafkaOffsetManager(zkHosts: String, kafkaParams: Map[String, Object]) exte
       val offsetRanges = r.asInstanceOf[HasOffsetRanges].offsetRanges
       offsetRanges.foreach(or => {
         val zkGroupTopicDirs = new ZKGroupTopicDirs(groupId, or.topic)
-        val offsetPath = zkGroupTopicDirs.consumerOffsetDir + "/" + or.partition
+        val offsetPath = s"${zkGroupTopicDirs.consumerOffsetDir}/${or.partition}"
         val offsetVal = if(storeEndOffset) or.untilOffset else or.fromOffset
         zookeeperUtils.updatePersistentPath(offsetPath, offsetVal.toString)
         log.info("保存Kafka消息偏移量详情: 话题:{}, 分区:{}, 偏移量:{}, ZK节点路径:{}", Seq[AnyRef](or.topic, or.partition.toString, offsetVal.toString, offsetPath): _*)
