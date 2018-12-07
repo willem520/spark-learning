@@ -4,6 +4,7 @@ import org.apache.spark.{SparkConf, SparkContext}
 
 /**
   * @author weiyu
+  * @Description map方法示例
   */
 object MapTest {
   val MASTER = "local[*]"
@@ -11,9 +12,8 @@ object MapTest {
   def main(args: Array[String]): Unit = {
     val conf = new SparkConf().setMaster(MASTER).setAppName(getClass.getSimpleName)
     val sc = new SparkContext(conf)
-    val a = sc.parallelize(List("bit","linc","xwc","fjg","wz","spark"),3)
-    val b = a.map(_.length)
-    val c = a.zip(b).collect()
-    c.foreach(println)
+    val originInput = sc.parallelize(List("Samza","Storm","Flink","Spark"),2)
+    val resultOutput = originInput.map(_ + " realtime")
+    resultOutput.foreach(println)
   }
 }

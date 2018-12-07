@@ -4,6 +4,7 @@ import org.apache.spark.{SparkConf, SparkContext}
 
 /**
   * @Author weiyu
+  * @Description flatMap方法示例
   */
 object FlatMapTest {
   val MASTER = "local[*]"

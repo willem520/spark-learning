@@ -13,14 +13,13 @@ object MapPartitionsTest {
     val a = sc.parallelize(1 to 9,3)
     def myFunc[T](iter:Iterator[T]):Iterator[(T,T)]={
       var res = List[(T, T)]()
-      var pre = iter.next
       while (iter.hasNext){
         val cur = iter.next
-        res.::=(pre,cur)
+        res.::=(cur,cur)
       }
       res.iterator
     }
-    val ret = a.mapPartitions(myFunc).collect()
-    ret.foreach(print)
+    val ret = a.mapPartitions(myFunc)
+    ret.foreach(println)
   }
 }
