@@ -2,6 +2,7 @@ package willem.weiyu.bigData.spark.streaming
 
 import com.alibaba.fastjson.JSON
 import org.apache.kafka.common.serialization.StringDeserializer
+import org.apache.log4j.LogManager
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import willem.weiyu.bigData.spark.common.KafkaOffsetManager
@@ -12,6 +13,9 @@ import willem.weiyu.bigData.spark.common.KafkaOffsetManager
   * @Date 2018/10/31 16:35
   */
 object StreamingKafkaExactlyOnce2 {
+
+  val log = LogManager.getLogger(getClass.getSimpleName)
+
   val MASTER = "local[4]"
   val CHECKPOINT_PATH = "/spark/checkpoint"
   val TOPIC = "test"
@@ -23,6 +27,8 @@ object StreamingKafkaExactlyOnce2 {
     System.setProperty("hadoop.home.dir", "D:\\hadoop-2.8.5")
 
     val sparkConf = new SparkConf().setMaster(MASTER).setAppName(getClass.getSimpleName)
+    //开启优雅关闭
+    //sparkConf.set("spark.streaming.stopGracefullyOnShutdown","true")
     //开启背压,通过spark.streaming.kafka.maxRatePerPartition限制速率（默认为false）
     //conf.set("spark.streaming.backpressure.enabled","true")
     //确保在kill任务时，能够处理完最后一批数据再关闭程序（默认为false）
@@ -49,9 +55,9 @@ object StreamingKafkaExactlyOnce2 {
       "auto.offset.reset"->"earliest")//当各分区下有已提交的offset时，从提交的offset开始消费，无提交的从指定位置（earliest,latest）开始消费
     val topics = Seq(TOPIC)
 
-    val zookeeperOffsetManager = new KafkaOffsetManager(ZK_HOSTS, kafkaParams)
+    val kafkaOffsetManager = new KafkaOffsetManager(ZK_HOSTS, kafkaParams)
 
-    val stream = zookeeperOffsetManager.createDirectStream[String, String](ssc, topics, kafkaParams)
+    val stream = kafkaOffsetManager.createDirectStream[String, String](ssc, topics, kafkaParams)
 
     val result = stream.map(record => {
       val obj = JSON.parseObject(record.value())
@@ -62,7 +68,7 @@ object StreamingKafkaExactlyOnce2 {
 
     result.print(10)
 
-    zookeeperOffsetManager.persistOffset(stream, true)
+    kafkaOffsetManager.persistOffset(stream, true)
 
     ssc
   }
